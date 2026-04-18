@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>FitAI Coach - Elite Performance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0066FF",
+                        "background-light": "#f7f8f5",
+                        "background-dark": "#0a1118",
+                        "card-dark": "#121c26",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside
+            class="w-64 border-r border-slate-200 dark:border-primary/10 bg-white dark:bg-background-dark hidden lg:flex flex-col sticky top-0 h-screen">
+            <div class="p-6 flex items-center gap-3">
+                <div class="size-10 rounded-full bg-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-background-dark font-bold">bolt</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight">FitAI</h1>
+                    <p class="text-xs text-slate-500 dark:text-primary/60 font-medium">ELITE PERFORMANCE</p>
+                </div>
+            </div>
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="index.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="workouts.html">
+                    <span class="material-symbols-outlined">fitness_center</span>
+                    Workouts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="nutrition.html">
+                    <span class="material-symbols-outlined">restaurant</span>
+                    Nutrition
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="insights.html">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    Insights
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-background-dark font-semibold"
+                    href="profile.html">
+                    <span class="material-symbols-outlined">person</span>
+                    Profile
+                </a>
+            </nav>
+            <div class="p-4 mt-auto">
+                <div class="mt-6 flex items-center gap-3 px-2">
+                    <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/10">
+                        <span id="user-avatar-initials" class="text-primary font-bold text-sm"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="sidebar-user-name" class="text-sm font-bold truncate">Loading...</p>
+                        <p id="sidebar-user-goal" class="text-xs text-slate-500 truncate">Athlete Profile</p>
+                    </div>
+                </div>
+                <button id="dash-logout-btn"
+                    class="w-full mt-4 flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-500/10 transition-colors font-semibold">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
+                </button>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-1 p-4 lg:p-8 flex flex-col h-screen overflow-y-auto">
+            <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-black tracking-tight">Profile</h2>
+                    <p class="text-slate-500 dark:text-primary/60 font-medium">Manage your profile, goals, and app preferences.</p>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <!-- Left Column: Profile & Account -->
+                <div class="xl:col-span-2 space-y-8">
+                    <!-- Profile Section -->
+                    <section class="bg-white dark:bg-card-dark rounded-3xl border border-slate-200 dark:border-primary/5 overflow-hidden shadow-sm">
+                        <div class="p-6 border-b border-slate-100 dark:border-primary/5 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">person</span>
+                            <h3 class="font-bold text-lg">Personal Profile</h3>
+                        </div>
+                        <div class="p-8">
+                            <div class="flex flex-col md:flex-row gap-8 items-start">
+                                <div class="relative group">
+                                    <div class="size-32 rounded-3xl bg-slate-100 dark:bg-slate-800 overflow-hidden border-2 border-slate-200 dark:border-primary/20 flex items-center justify-center">
+                                        <span id="profile-avatar-initials" class="text-primary font-black text-4xl"></span>
+                                    </div>
+                                    <button id="profile-photo-btn" class="absolute -bottom-2 -right-2 size-10 bg-primary/40 text-background-dark/60 rounded-xl shadow-lg flex items-center justify-center cursor-not-allowed" title="Photo upload not available" disabled>
+                                        <span class="material-symbols-outlined text-xl">photo_camera</span>
+                                    </button>
+                                </div>
+                                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Full Name</label>
+                                        <input type="text" id="setting-name" value="" placeholder="Loading..." class="w-full bg-slate-50 dark:bg-background-dark border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none transition-all" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Email Address</label>
+                                        <input type="email" id="setting-email" value="" placeholder="Loading..." class="w-full bg-slate-50 dark:bg-background-dark border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none transition-all" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Fitness Level</label>
+                                        <select id="setting-level" class="w-full bg-slate-50 dark:bg-background-dark border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none transition-all appearance-none">
+                                            <option value="Beginner">Beginner</option>
+                                            <option value="Intermediate">Intermediate</option>
+                                            <option value="Advanced">Advanced Athlete</option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Goal</label>
+                                        <select id="setting-goal" class="w-full bg-slate-50 dark:bg-background-dark border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none transition-all appearance-none">
+                                            <option value="weight-loss">Weight Loss</option>
+                                            <option value="muscle-gain">Muscle Gain</option>
+                                            <option value="endurance">Endurance</option>
+                                            <option value="maintenance">Maintenance</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Metrics Section -->
+                    <section class="bg-white dark:bg-card-dark rounded-3xl border border-slate-200 dark:border-primary/5 overflow-hidden shadow-sm">
+                        <div class="p-6 border-b border-slate-100 dark:border-primary/5 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">straighten</span>
+                            <h3 class="font-bold text-lg">Physical Metrics</h3>
+                        </div>
+                        <div class="p-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Weight (kg)</label>
+                                <input type="number" id="setting-weight" value="" placeholder="—" class="w-full bg-slate-50 dark:bg-background-dark border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Height (cm)</label>
+                                <input type="number" id="setting-height" value="" placeholder="—" class="w-full bg-slate-50 dark:bg-background-dark border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Age</label>
+                                <input type="number" id="setting-age" value="" placeholder="—" class="w-full bg-slate-50 dark:bg-background-dark border-slate-200 dark:border-primary/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none" />
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column: Preferences & Appearance -->
+                <div class="space-y-8">
+                    <!-- Appearance -->
+                    <section class="bg-white dark:bg-card-dark rounded-3xl border border-slate-200 dark:border-primary/5 overflow-hidden shadow-sm">
+                        <div class="p-6 border-b border-slate-100 dark:border-primary/5 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">palette</span>
+                            <h3 class="font-bold text-lg">Appearance</h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-background-dark rounded-2xl border border-slate-100 dark:border-primary/5">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-slate-400">dark_mode</span>
+                                    <span class="text-sm font-bold">Dark Mode</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="theme-toggle" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-background-dark rounded-2xl border border-slate-100 dark:border-primary/5">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-slate-400">notifications</span>
+                                    <span class="text-sm font-bold">Notifications</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Chat Window -->
+    <div id="chat-window"
+        class="fixed bottom-24 right-4 lg:right-8 w-80 md:w-96 h-[500px] bg-white dark:bg-card-dark rounded-3xl shadow-2xl border border-slate-200 dark:border-primary/20 flex-col hidden overflow-hidden z-50">
+        <!-- Header -->
+        <div
+            class="p-4 border-b border-slate-100 dark:border-primary/10 flex justify-between items-center bg-primary text-white">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined bg-white/20 p-2 rounded-lg">robot_2</span>
+                <div>
+                    <h3 class="font-bold">FitAI Coach</h3>
+                    <p class="text-xs text-white/80">Online</p>
+                </div>
+            </div>
+            <button id="close-chat-btn" class="text-white hover:bg-white/20 p-1 rounded-lg transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-slate-50 dark:bg-background-dark">
+            <!-- Initial Greeting -->
+            <div class="flex justify-start mb-4">
+                <div
+                    class="max-w-[80%] rounded-2xl p-3 text-sm bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-none">
+                    Connecting to your AI coach...
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 border-t border-slate-100 dark:border-primary/10 bg-white dark:bg-card-dark">
+            <form id="chat-form" class="flex items-center gap-2">
+                <input id="chat-input" type="text" placeholder="Ask your coach..."
+                    class="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary dark:text-white placeholder-slate-400">
+                <button type="submit"
+                    class="p-2 bg-primary text-background-dark rounded-xl hover:bg-primary/90 transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined text-sm font-bold">send</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle-btn"
+        class="fixed bottom-6 right-6 lg:right-8 size-14 bg-primary text-background-dark rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center z-50 group">
+        <span class="material-symbols-outlined text-2xl">forum</span>
+    </button>
+
+    <script src="js/config.js"></script>
+    <script src="js/state/auth.js"></script>
+    <script src="js/utils/ui.js"></script>
+    <script src="js/services/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+
+</html>

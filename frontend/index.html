@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>FitAI Coach - Elite Performance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0066FF",
+                        "background-light": "#f7f8f5",
+                        "background-dark": "#0a1118",
+                        "card-dark": "#121c26",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside
+            class="w-64 border-r border-slate-200 dark:border-primary/10 bg-white dark:bg-background-dark hidden lg:flex flex-col sticky top-0 h-screen">
+            <div class="p-6 flex items-center gap-3">
+                <div class="size-10 rounded-full bg-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-background-dark font-bold">bolt</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight">FitAI</h1>
+                    <p class="text-xs text-slate-500 dark:text-primary/60 font-medium">ELITE PERFORMANCE</p>
+                </div>
+            </div>
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-background-dark font-semibold"
+                    href="index.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="workouts.html">
+                    <span class="material-symbols-outlined">fitness_center</span>
+                    Workouts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="nutrition.html">
+                    <span class="material-symbols-outlined">restaurant</span>
+                    Nutrition
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="insights.html">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    Insights
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors"
+                    href="profile.html">
+                    <span class="material-symbols-outlined">person</span>
+                    Profile
+                </a>
+            </nav>
+            <div class="p-4 mt-auto">
+                <div class="mt-6 flex items-center gap-3 px-2">
+                    <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/10">
+                        <span id="user-avatar-initials" class="text-primary font-bold text-sm"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="sidebar-user-name" class="text-sm font-bold truncate">Loading...</p>
+                        <p id="sidebar-user-goal" class="text-xs text-slate-500 truncate">Athlete Profile</p>
+                    </div>
+                </div>
+                <button id="dash-logout-btn"
+                    class="w-full mt-4 flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-500/10 transition-colors font-semibold">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
+                </button>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-1 p-4 lg:p-8">
+            <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-black tracking-tight">Daily Performance</h2>
+                    <p id="dash-header-subtitle" class="text-slate-500 dark:text-primary/60 font-medium">Loading your performance data...</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button
+                        class="p-2 rounded-xl bg-white dark:bg-card-dark border border-slate-200 dark:border-primary/10 text-slate-600 dark:text-primary">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <button id="logout-btn"
+                        class="px-5 py-2.5 bg-primary text-background-dark font-bold rounded-xl flex items-center gap-2">
+                        <span class="material-symbols-outlined">logout</span>
+                        Log Out
+                    </button>
+                </div>
+            </header>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Stats Grid -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div
+                            class="bg-white dark:bg-card-dark p-6 rounded-2xl border border-slate-200 dark:border-primary/5">
+                            <div class="flex justify-between items-start mb-4">
+                                <span
+                                    class="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-lg">local_fire_department</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Calories Burnt</p>
+                            <p id="dash-calories" class="text-2xl font-black mt-1">0 <span
+                                    class="text-sm font-medium text-slate-400 uppercase">kcal</span></p>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-card-dark p-6 rounded-2xl border border-slate-200 dark:border-primary/5">
+                            <div class="flex justify-between items-start mb-4">
+                                <span
+                                    class="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-lg">timer</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Workout Time</p>
+                            <p id="dash-time" class="text-2xl font-black mt-1">0 <span
+                                    class="text-sm font-medium text-slate-400 uppercase">mins</span></p>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-card-dark p-6 rounded-2xl border border-slate-200 dark:border-primary/5">
+                            <div class="flex justify-between items-start mb-4">
+                                <span
+                                    class="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-lg">bolt</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Intensity Score</p>
+                            <p id="dash-intensity" class="text-2xl font-black mt-1">0<span
+                                    class="text-sm font-medium text-slate-400 uppercase">%</span></p>
+                        </div>
+                    </div>
+                    <!-- AI Insight Card -->
+                    <div class="relative overflow-hidden bg-primary/10 border border-primary/20 rounded-3xl p-8 group">
+                        <div
+                            class="absolute top-0 right-0 p-8 text-primary/10 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined !text-9xl">psychology</span>
+                        </div>
+                        <div class="relative z-10 max-w-xl">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="size-2 rounded-full bg-primary animate-pulse"></span>
+                                <span class="text-xs font-black text-primary uppercase tracking-widest">AI Coach
+                                    Insight</span>
+                            </div>
+                            <h3 id="dash-insight-title" class="text-2xl font-extrabold mb-3">Syncing your data...</h3>
+                            <p id="dash-insight-desc" class="text-slate-400 leading-relaxed mb-6">Analyzing your recent activity to provide personalized performance insights.</p>
+                            <button id="view-routine-btn"
+                                class="px-6 py-3 bg-primary text-background-dark font-black rounded-xl text-sm uppercase tracking-wider">View
+                                Recommended Routine</button>
+                        </div>
+                    </div>
+                    <!-- Today's Routine -->
+                    <div
+                        class="bg-white dark:bg-card-dark rounded-2xl border border-slate-200 dark:border-primary/5 overflow-hidden">
+                        <div
+                            class="p-6 border-b border-slate-100 dark:border-primary/10 flex items-center justify-between">
+                            <h3 class="text-lg font-bold">Today's Exercises</h3>
+                            <span id="dash-workout-focus" class="text-sm font-medium text-primary">Legs &amp; Core Focus</span>
+                        </div>
+                        <div id="dash-exercises-container" class="divide-y divide-slate-100 dark:divide-primary/10 min-h-[200px] flex flex-col justify-center">
+                            <!-- Loading state -->
+                            <div class="p-8 text-center animate-pulse">
+                                <span class="material-symbols-outlined text-4xl text-slate-200 dark:text-slate-800 mb-2">fitness_center</span>
+                                <p class="text-sm text-slate-400 font-medium">Syncing your routine...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Side Cards -->
+                <div class="lg:col-span-4 space-y-6">
+                    <!-- Nutrition/Macro Tracking -->
+                    <div
+                        class="bg-white dark:bg-card-dark p-6 rounded-3xl border border-slate-200 dark:border-primary/5">
+                        <div class="flex items-center justify-between mb-8">
+                            <h3 class="text-lg font-bold">Nutrition Macros</h3>
+                            <span class="material-symbols-outlined text-slate-400">info</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center mb-8 relative">
+                            <!-- Progress Ring Visual -->
+                            <svg class="w-48 h-48">
+                                <circle class="text-slate-100 dark:text-slate-800" cx="96" cy="96" fill="transparent"
+                                    r="80" stroke="currentColor" stroke-width="12"></circle>
+                                <circle id="dash-kcal-ring" class="text-primary" cx="96" cy="96" fill="transparent" r="80"
+                                    stroke="currentColor" stroke-dasharray="502.6" stroke-dashoffset="502.6"
+                                    stroke-linecap="round" stroke-width="12"
+                                    style="transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 0.5s ease;"></circle>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <p id="dash-kcal-left" class="text-4xl font-black">—</p>
+                                <p id="dash-kcal-label" class="text-xs text-slate-500 font-bold uppercase tracking-widest">Loading</p>
+                            </div>
+                        </div>
+                        <div class="space-y-5">
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="font-bold">Protein</span>
+                                    <span id="dash-protein-val" class="text-slate-500">— / —</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="dash-protein-bar" class="h-full bg-primary rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="font-bold">Carbs</span>
+                                    <span id="dash-carbs-val" class="text-slate-500">— / —</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="dash-carbs-bar" class="h-full bg-primary/60 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="font-bold">Fats</span>
+                                    <span id="dash-fats-val" class="text-slate-500">— / —</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="dash-fats-bar" class="h-full bg-primary/30 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Chat Window -->
+    <div id="chat-window"
+        class="fixed bottom-24 right-4 lg:right-8 w-80 md:w-96 h-[500px] bg-white dark:bg-card-dark rounded-3xl shadow-2xl border border-slate-200 dark:border-primary/20 flex-col hidden overflow-hidden z-50">
+        <!-- Header -->
+        <div
+            class="p-4 border-b border-slate-100 dark:border-primary/10 flex justify-between items-center bg-primary text-white">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined bg-white/20 p-2 rounded-lg">robot_2</span>
+                <div>
+                    <h3 class="font-bold">FitAI Coach</h3>
+                    <p class="text-xs text-white/80">Online</p>
+                </div>
+            </div>
+            <button id="close-chat-btn" class="text-white hover:bg-white/20 p-1 rounded-lg transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-slate-50 dark:bg-background-dark">
+            <!-- Initial Greeting -->
+            <div class="flex justify-start mb-4">
+                <div
+                    class="max-w-[80%] rounded-2xl p-3 text-sm bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-none">
+                    Connecting to your AI coach...
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 border-t border-slate-100 dark:border-primary/10 bg-white dark:bg-card-dark">
+            <form id="chat-form" class="flex items-center gap-2">
+                <input id="chat-input" type="text" placeholder="Ask your coach..."
+                    class="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary dark:text-white placeholder-slate-400">
+                <button type="submit"
+                    class="p-2 bg-primary text-background-dark rounded-xl hover:bg-primary/90 transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined text-sm font-bold">send</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle-btn"
+        class="fixed bottom-6 right-6 lg:right-8 size-14 bg-primary text-background-dark rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center z-50 group">
+        <span class="material-symbols-outlined text-2xl">forum</span>
+    </button>
+
+    <script src="js/config.js"></script>
+    <script src="js/state/auth.js"></script>
+    <script src="js/utils/ui.js"></script>
+    <script src="js/services/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

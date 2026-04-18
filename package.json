@@ -1,0 +1,35 @@
+{
+  "name": "ai-fitness-coach",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:db": "node src/test/test_db.js",
+    "test:chat": "node src/test/test_chat.js",
+    "test:gemini": "node src/test/test_gemini.js",
+    "test:rapidapi": "node src/test/test_rapidapi.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@google/genai": "^1.44.0",
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.13.6",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.4",
+    "openai": "^6.27.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
